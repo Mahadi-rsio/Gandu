@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>SocialBD</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600&display=swap" rel="stylesheet">
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+			transition: all 0.3s ease;
+		}
+
+		body {
+			font-family: 'Oswald', sans-serif;
+			height: 100vh;
+			display: flex;
+			flex-direction: column;
+			background-color: #121212;
+			color: #ffffff;
+		}
+
+		.header-section {
+			position: fixed;
+			top: 0;
+			left: 0;
+			right: 0;
+			z-index: 1000;
+		}
+
+		.top-bar {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			padding: 15px 25px;
+			background-color: #1E1E1E;
+			box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+			height: 60px;
+		}
+
+		.top-bar .logo {
+			font-size: 28px;
+			font-weight: 700;
+			color: #BB86FC;
+			letter-spacing: 1px;
+		}
+
+		.top-bar .icons i {
+			font-size: 22px;
+			margin-left: 20px;
+			cursor: pointer;
+			color: #ffffff;
+			padding: 12px;
+			border-radius: 50%;
+			background: rgba(255, 255, 255, 0.1);
+		}
+
+		.top-bar .icons i:hover {
+			background-color: rgba(3, 218, 198, 0.9);
+			transform: scale(1.1);
+		}
+
+		.bottom-bar {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			padding: 10px 25px;
+			background-color: #1E1E1E;
+			box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+			height: 60px;
+		}
+
+		.bottom-bar .left {
+			margin-left: 0px;
+		}
+
+		.user-info {
+			display: flex;
+			align-items: center;
+			gap: 5px;
+			background: rgba(255, 255, 255, 0.1);
+			padding: 3px 15px;
+			border-radius: 30px;
+			margin-left: -15px;
+		}
+
+		.user-info i {
+			font-size: 15px;
+			padding: 8px;
+			margin-right: -0px;
+			background: none;
+			border-radius: 50%;
+			transition: all 0.3s ease;
+		}
+
+		.user-info i:hover {
+			background-color: rgba(3, 218, 198, 0.9);
+			transform: scale(1.1);
+		}
+
+		.user-info span {
+			font-weight: 500;
+			color: #fff;
+			padding-right: 5px;
+		}
+
+		.bottom-bar .right {
+			display: flex;
+			gap: 15px;
+		}
+
+		.bottom-bar i {
+			font-size: 22px;
+			cursor: pointer;
+			color: #ffffff;
+			padding: 10px;
+			border-radius: 50%;
+			background: rgba(255, 255, 255, 0.1);
+		}
+
+		.bottom-bar i:hover {
+			background-color: rgba(3, 218, 198, 0.9);
+		}
+
+		.content {
+			flex: 1;
+			padding: 30px;
+			margin-top: 120px;
+			overflow-y: auto;
+			background: linear-gradient(45deg, #121212, #1A1A1A);
+		}
+
+		.content p {
+			color: #cccccc;
+			line-height: 1.6;
+		}
+
+		.edit-button {
+			position: fixed;
+			bottom: 30px;
+			right: 25px;
+			background: linear-gradient(135deg, #BB86FC, #985EFF);
+			color: white;
+			padding: 18px;
+			border-radius: 50%;
+			cursor: pointer;
+			box-shadow: 0 4px 15px rgba(187, 134, 252, 0.3);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			width: 56px;
+			height: 56px;
+		}
+
+		.edit-button:hover {
+			transform: scale(1.1) rotate(90deg);
+		}
+
+		.chat-button {
+			position: fixed;
+			bottom: 30px;
+			left: 25px;
+			background: linear-gradient(135deg, #03DAC6, #018786);
+			color: white;
+			padding: 18px;
+			border-radius: 50%;
+			cursor: pointer;
+			box-shadow: 0 4px 15px rgba(3, 218, 198, 0.3);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			width: 56px;
+			height: 56px;
+		}
+
+		.chat-button:hover {
+			transform: scale(1.1);
+		}
+
+		::-webkit-scrollbar {
+			width: 8px;
+		}
+
+		::-webkit-scrollbar-track {
+			background: #2D2D2D;
+		}
+
+		::-webkit-scrollbar-thumb {
+			background: #BB86FC;
+			border-radius: 4px;
+		}
+	</style>
+</head>
+<script src="/stats_panel.js"></script>
+
+<body>
+	<div class="header-section">
+		<div class="top-bar">
+			<div class="logo">SocialBD</div>
+			<div class="icons">
+				<i class="fa fa-plus"></i>
+				<i class="fa fa-bars"></i>
+			</div>
+		</div>
+
+		<div class="bottom-bar">
+			<div class="left">
+				<div class="user-info">
+					<a href="profile.html" style="color: whitesmoke"><i class="fa fa-user"></i></a>
+					<span>Log in</span>
+				</div>
+			</div>
+			<div class="right">
+				<a href="https://www.google.com"><i class="fa fa-comment"></i></a>
+				<i class="fa fa-bell"></i>
+			</div>
+		</div>
+	</div>
+
+	<div class="content">
+		<p>Welcome to SocialBD Dark Theme<br><br>
+			Discover a modern social experience with smooth animations and elegant design.<br>
+			✨ Premium Dark Interface<br>
+			🔒 Secure Connections<br>
+			💬 Smart Chat System<br>
+			🎨 Customizable Profiles</p>
+	</div>
+
+	<div class="chat-button">
+		<a href="chat.html" style="color: white"><i class="fa fa-comments"></i></a>
+	</div>
+	<div class="edit-button">
+		<i class="fa fa-edit"></i>
+	</div>
+</body>
+
+<script type="text/javascript" charset="utf-8"></script>
+
+</html>
