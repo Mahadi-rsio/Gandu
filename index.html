@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gray-900 min-h-screen flex items-center justify-center">
+    <div x-data="{ 
+        isLoading: false, 
+        email: '', 
+        password: '', 
+        rememberMe: false,
+        showResetModal: false,
+        resetEmail: '',
+        resetLoading: false
+    }" class="bg-gray-800 p-8 rounded-xl shadow-xl w-96 relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-purple-500/10"></div>
+        
+        <div class="relative">
+            <h2 class="text-3xl font-bold mb-8 text-center text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500">
+                Welcome Back
+            </h2>
+            
+            <div id="error-message" class="hidden mb-4 p-3 rounded-lg bg-red-500/20 text-red-300 text-sm border border-red-500/30"></div>
+            
+            <form @submit.prevent="handleLogin" id="loginForm" class="space-y-6">
+                <div>
+                    <label class="block text-gray-300 text-sm font-medium mb-2">Email</label>
+                    <div class="relative">
+                        <i class="fas fa-envelope absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                        <input 
+                            type="email" 
+                            required
+                            x-model="email"
+                            class="w-full pl-10 pr-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-500/30 text-gray-100 placeholder-gray-400 transition duration-200">
+                    </div>
+                </div>
+                
+                <div>
+                    <label class="block text-gray-300 text-sm font-medium mb-2">Password</label>
+                    <div class="relative">
+                        <i class="fas fa-lock absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                        <input 
+                            type="password" 
+                            required
+                            x-model="password"
+                            class="w-full pl-10 pr-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-500/30 text-gray-100 placeholder-gray-400 transition duration-200">
+                    </div>
+                </div>
+                
+                <div class="flex items-center justify-between">
+                    <label class="flex items-center space-x-2 cursor-pointer">
+                        <input 
+                            type="checkbox" 
+                            x-model="rememberMe"
+                            class="w-4 h-4 text-blue-500 bg-gray-700 border-gray-600 rounded focus:ring-blue-500">
+                        <span class="text-gray-300 text-sm">Remember me</span>
+                    </label>
+                    <a href="#" @click.prevent="showResetModal = true" class="text-blue-400 hover:text-blue-300 text-sm">Forgot Password?</a>
+                </div>
+                
+                <div class="flex space-x-4">
+                    <button 
+                        type="button"
+                        @click="email = ''; password = ''"
+                        class="w-1/2 bg-gray-600 hover:bg-gray-700 text-white py-3 px-4 rounded-lg font-medium transition duration-200">
+                        Reset
+                    </button>
+                    <button 
+                        type="submit" 
+                        :disabled="isLoading"
+                        class="w-1/2 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white py-3 px-4 rounded-lg font-medium transition-all duration-200 transform hover:scale-[1.01] shadow-lg hover:shadow-blue-500/20 relative overflow-hidden"
+                        x-html="isLoading ? 
+                            '<i class=\'fas fa-spinner fa-spin mr-2\'></i> Signing In...' : 
+                            '<span class=\'relative\'>Login <i class=\'fas fa-arrow-right ml-2\'></i></span>'">
+                    </button>
+                </div>
+                
+                <div class="text-center text-gray-400 text-sm">
+                    Don't have an account? 
+                    <a href="/register_verify.html" class="text-blue-400 hover:text-blue-300 font-medium">Register here</a>
+                </div>
+            </form>
+        </div>
+
+        <!-- Password Reset Modal -->
+        <div x-show="showResetModal" x-cloak class="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+            <div class="bg-gray-800 rounded-xl p-6 w-full max-w-md relative">
+                <h3 class="text-xl font-bold mb-4 text-gray-100">Reset Password</h3>
+                <form @submit.prevent="handleSendReset">
+                    <div class="mb-4">
+                        <label class="block text-gray-300 text-sm font-medium mb-2">Email</label>
+                        <input 
+                            type="email" 
+                            x-model="resetEmail"
+                            required
+                            class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:border-blue-400 text-gray-100 placeholder-gray-400">
+                    </div>
+                    <div id="reset-error" class="hidden mb-4 p-3 rounded-lg bg-red-500/20 text-red-300 text-sm border border-red-500/30"></div>
+                    <div id="reset-success" class="hidden mb-4 p-3 rounded-lg bg-green-500/20 text-green-300 text-sm border border-green-500/30"></div>
+                    <div class="flex justify-end space-x-3">
+                        <button 
+                            type="button"
+                            @click="showResetModal = false; resetEmail = '';"
+                            class="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg transition duration-200">
+                            Cancel
+                        </button>
+                        <button 
+                            type="submit"
+                            :disabled="resetLoading"
+                            class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition duration-200 flex items-center">
+                            <span x-show="!resetLoading">Send Reset Link</span>
+                            <i x-show="resetLoading" class="fas fa-spinner fa-spin ml-2"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+<!-- 
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyA7iRhlrgnn44g-NiDJCNTjIZpa0Xt7mY0",
+            authDomain: "flask-chat-9e635.firebaseapp.com",
+            projectId: "flask-chat-9e635",
+            storageBucket: "flask-chat-9e635.appspot.com",
+            messagingSenderId: "594505769024",
+            appId: "1:594505769024:web:280db3b1e516f581ea7fa5",
+            measurementId: "G-YL8QV4KWW5"
+        };
+
+        const app = firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+
+        function handleLogin() {
+            const errorMessage = document.getElementById('error-message');
+            errorMessage.classList.add('hidden');
+            errorMessage.textContent = '';
+
+            this.isLoading = true;
+
+            const persistence = this.rememberMe ? 
+                firebase.auth.Auth.Persistence.LOCAL : 
+                firebase.auth.Auth.Persistence.SESSION;
+
+            auth.setPersistence(persistence)
+                .then(() => auth.signInWithEmailAndPassword(this.email, this.password))
+                .then(() => window.location.href = '/profile/')
+                .catch((error) => {
+                    this.isLoading = false;
+                    errorMessage.textContent = error.message;
+                    errorMessage.classList.remove('hidden');
+                });
+        }
+
+        function handleSendReset() {
+            const resetError = document.getElementById('reset-error');
+            const resetSuccess = document.getElementById('reset-success');
+            resetError.classList.add('hidden');
+            resetSuccess.classList.add('hidden');
+            this.resetLoading = true;
+
+            auth.sendPasswordResetEmail(this.resetEmail)
+                .then(() => {
+                    resetSuccess.textContent = 'Password reset email sent. Check your inbox.';
+                    resetSuccess.classList.remove('hidden');
+                    this.resetEmail = '';
+                    setTimeout(() => this.showResetModal = false, 3000);
+                })
+                .catch((error) => {
+                    resetError.textContent = error.message;
+                    resetError.classList.remove('hidden');
+                })
+                .finally(() => this.resetLoading = false);
+        }
+    </script> -->
+    
+    <script>
+	const firebaseConfig = {
+		apiKey: "AIzaSyA7iRhlrgnn44g-NiDJCNTjIZpa0Xt7mY0",
+		authDomain: "flask-chat-9e635.firebaseapp.com",
+		projectId: "flask-chat-9e635",
+		storageBucket: "flask-chat-9e635.appspot.com",
+		messagingSenderId: "594505769024",
+		appId: "1:594505769024:web:280db3b1e516f581ea7fa5",
+		measurementId: "G-YL8QV4KWW5"
+	};
+
+	const app = firebase.initializeApp(firebaseConfig);
+	const auth = firebase.auth();
+
+	function handleLogin() {
+		const errorMessage = document.getElementById('error-message');
+		errorMessage.classList.add('hidden');
+		errorMessage.textContent = '';
+
+		this.isLoading = true;
+
+		const persistence = this.rememberMe ?
+			firebase.auth.Auth.Persistence.LOCAL :
+			firebase.auth.Auth.Persistence.SESSION;
+
+		auth.setPersistence(persistence)
+			.then(() => auth.signInWithEmailAndPassword(this.email, this.password))
+			.then((userCredential) => {
+				const user = userCredential.user;
+				const uid = user.uid;
+
+				
+				
+				const expirationDate = new Date();
+				expirationDate.setDate(expirationDate.getDate() + (this.rememberMe ? 7 : 1));
+
+				document.cookie = `uid=${uid}; expires=${expirationDate.toUTCString()}; path=/; Secure; SameSite=Strict`;
+
+				// Redirect to profile page with UID
+				window.location.href = `/edit.html?uid=${uid}`;
+			})
+			.catch((error) => {
+				this.isLoading = false;
+				errorMessage.textContent = error.message;
+				errorMessage.classList.remove('hidden');
+			});
+	}
+
+	function handleSendReset() {
+		const resetError = document.getElementById('reset-error');
+		const resetSuccess = document.getElementById('reset-success');
+		resetError.classList.add('hidden');
+		resetSuccess.classList.add('hidden');
+		this.resetLoading = true;
+
+		auth.sendPasswordResetEmail(this.resetEmail)
+			.then(() => {
+				resetSuccess.textContent = 'Password reset email sent. Check your inbox.';
+				resetSuccess.classList.remove('hidden');
+				this.resetEmail = '';
+				setTimeout(() => this.showResetModal = false, 3000);
+			})
+			.catch((error) => {
+				resetError.textContent = error.message;
+				resetError.classList.remove('hidden');
+			})
+			.finally(() => this.resetLoading = false);
+	}
+</script>
+    
+</body>
+</html>

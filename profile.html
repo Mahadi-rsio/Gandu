@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en" class="dark" x-data="profile">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Profile</title>
+    
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                fontFamily: {
+                    sans: ['Inter', 'sans-serif'],
+                },
+                extend: {
+                    colors: {
+                        'primary': '#6366f1',
+                        'dark-bg': '#0f172a',
+                        'card-bg': '#1e293b',
+                        'hover-bg': '#334155'
+                    }
+                }
+            }
+        };
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyA7iRhlrgnn44g-NiDJCNTjIZpa0Xt7mY0",
+            authDomain: "flask-chat-9e635.firebaseapp.com",
+            projectId: "flask-chat-9e635",
+            storageBucket: "flask-chat-9e635.appspot.com",
+            messagingSenderId: "594505769024",
+            appId: "1:594505769024:web:280db3b1e516f581ea7fa5",
+            measurementId: "G-YL8QV4KWW5"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const auth = firebase.auth();
+    </script>
+</head>
+
+<body class="bg-dark-bg text-gray-100 font-sans min-h-screen">
+    <div x-data="{ loading: true }" 
+         x-init="fetchProfile().then(() => loading = false)"
+         class="container mx-auto px-4 py-8 max-w-7xl">
+        
+        <!-- Loading Spinner -->
+        <div x-show="loading" class="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
+            <div class="animate-spin rounded-full h-12 w-12 border-4 border-primary border-t-transparent"></div>
+        </div>
+
+        <!-- Main Content -->
+        <template x-if="!loading">
+            <div>
+
+
+                <!-- Header Section -->
+                <header class="text-center mb-12">
+                    <!-- Profile Picture -->
+                    <div class="mb-6 flex justify-center">
+                        <img :src="data.photoURL || 'https://via.placeholder.com/150'" 
+                             alt="Profile Picture"
+                             class="w-32 h-32 rounded-full ring-4 ring-primary object-cover shadow-xl">
+                    </div>
+					
+                    <h1 class="text-4xl font-bold text-primary mb-2" x-text="data.name || 'User Name'"></h1>
+                    <p class="text-xl text-gray-400 mb-6" x-text="data.jobTitle || 'Job Title'"></p>
+
+<div class="flex justify-end gap-4 mb-8">
+    					<button @click="logout" 
+        					class="w-15 h-15 px-4 py-2 bg-cyan-600 hover:bg-red-700 text-white rounded-full transition-colors flex items-center gap-2">
+        					<i class="fas fa-user-plus"></i>
+    					</button>
+    
+    					<button @click="logout" 
+        					class="w-15 h15 px-4 py-2 bg-blue-700 hover:bg-blue-800 text-white rounded-full transition-colors flex items-center gap-2">
+        					<i class="fas fa-sign-out-alt"></i>
+    					</button>
+    					<button @click="logout" 
+        					class="w-15 h15 px-4 py-2 bg-blue-700 hover:bg-blue-800 text-white rounded-full transition-colors flex items-center gap-2">
+        					<i class="fa fa-comments"></i>
+    					</button>
+					</div>                   
+                	
+
+
+                    <!-- Contact Info -->
+                    <div class="bg-card-bg p-6 rounded-2xl shadow-xl mb-8">
+                        <div class="flex flex-wrap justify-center gap-4">
+                            <div class="flex items-center gap-2 bg-hover-bg px-4 py-2 rounded-lg">
+                                <i class="fas fa-map-marker-alt text-primary"></i>
+                                <span x-text="data.location || 'Location not specified'"></span>
+                            </div>
+                            <div class="flex items-center gap-2 bg-hover-bg px-4 py-2 rounded-lg">
+                                <i class="fas fa-birthday-cake text-primary"></i>
+                                <span x-text="data.dob || 'Date of birth not specified'"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Social Links -->
+                    <div class="bg-card-bg p-6 rounded-2xl shadow-xl">
+                        <div class="flex flex-wrap justify-center gap-4">
+                            <template x-for="([platform, url]) in Object.entries(data.socials || {})" :key="platform">
+                                <a x-show="url" :href="url" target="_blank" 
+                                   class="p-3 rounded-lg bg-hover-bg hover:bg-primary transition-colors"
+                                   :title="platform.charAt(0).toUpperCase() + platform.slice(1)">
+                                    <i :class="{
+                                        'fab fa-facebook': platform === 'facebook',
+                                        'fab fa-linkedin': platform === 'linkedin',
+                                        'fab fa-github': platform === 'github',
+                                        'fab fa-telegram': platform === 'telegram',
+                                        'fab fa-instagram': platform === 'instagram',
+                                        'fas fa-globe': platform === 'website'
+                                    }" class="text-xl"></i>
+                                </a>
+                            </template>
+                        </div>
+                    </div>
+                </header>
+
+                <!-- Main Sections -->
+                <div class="grid md:grid-cols-3 gap-8">
+                    <!-- Left Column -->
+                    <div class="md:col-span-1 space-y-8">
+                        <!-- About Section -->
+                        <section class="bg-card-bg p-6 rounded-2xl shadow-xl">
+                            <h2 class="text-2xl font-bold text-primary mb-4 border-b-2 border-primary pb-2">About Me</h2>
+                            <p class="text-gray-300 leading-relaxed" 
+                               x-text="data.about || 'No description available'"
+                               :class="{ 'italic text-gray-400': !data.about }"></p>
+                        </section>
+
+                        <!-- Skills Section -->
+                        <section class="bg-card-bg p-6 rounded-2xl shadow-xl">
+                            <h2 class="text-2xl font-bold text-primary mb-4 border-b-2 border-primary pb-2">Skills</h2>
+                            <template x-if="!data.skills || data.skills.length === 0">
+                                <p class="text-gray-400 italic">No skills added yet</p>
+                            </template>
+                            <template x-for="skill in data.skills || []" :key="skill.name">
+                                <div class="mb-4">
+                                    <div class="flex justify-between mb-2">
+                                        <span x-text="skill.name"></span>
+                                        <span x-text="`${skill.level}%`" class="text-primary"></span>
+                                    </div>
+                                    <div class="h-2 bg-hover-bg rounded-full">
+                                        <div class="h-full bg-primary rounded-full transition-all duration-500" 
+                                             :style="`width: ${skill.level}%`"
+                                             x-init="setTimeout(() => $el.style.width = `${skill.level}%`, 100)"></div>
+                                    </div>
+                                </div>
+                            </template>
+                        </section>
+
+                        <!-- Education Section -->
+                        <section class="bg-card-bg p-6 rounded-2xl shadow-xl">
+                            <h2 class="text-2xl font-bold text-primary mb-4 border-b-2 border-primary pb-2">Education</h2>
+                            <template x-if="!data.education || data.education.length === 0">
+                                <p class="text-gray-400 italic">No education information available</p>
+                            </template>
+                            <template x-for="edu in data.education || []" :key="edu.institution">
+                                <div class="border-l-4 border-primary pl-4 mb-6">
+                                    <h3 class="text-lg font-semibold" x-text="edu.degree"></h3>
+                                    <p class="text-gray-400 text-sm mb-1" x-text="edu.institution"></p>
+                                    <p class="text-gray-400 text-sm" x-text="edu.duration"></p>
+                                </div>
+                            </template>
+                        </section>
+                    </div>
+
+                    <!-- Right Column -->
+                    <div class="md:col-span-2 space-y-8">
+                        <!-- Experience Section -->
+                        <section class="bg-card-bg p-6 rounded-2xl shadow-xl">
+                            <h2 class="text-2xl font-bold text-primary mb-4 border-b-2 border-primary pb-2">Experience</h2>
+                            <template x-if="!data.experience || data.experience.length === 0">
+                                <p class="text-gray-400 italic">No experience added yet</p>
+                            </template>
+                            <template x-for="exp in data.experience || []" :key="exp.company">
+                                <div class="border-l-4 border-primary pl-4 mb-6">
+                                    <h3 class="text-xl font-semibold" x-text="exp.position"></h3>
+                                    <p class="text-sm text-gray-400 mb-2">
+                                        <span x-text="exp.company"></span> • 
+                                        <span x-text="exp.duration"></span>
+                                    </p>
+                                    <ul class="list-disc list-inside space-y-2">
+                                        <template x-for="(desc, index) in exp.description || []" :key="index">
+                                            <li x-text="desc"></li>
+                                        </template>
+                                    </ul>
+                                </div>
+                            </template>
+                        </section>
+
+                        <!-- Projects Section -->
+                        <section class="bg-card-bg p-6 rounded-2xl shadow-xl">
+                            <h2 class="text-2xl font-bold text-primary mb-4 border-b-2 border-primary pb-2">Projects</h2>
+                            <template x-if="!data.projects || data.projects.length === 0">
+                                <p class="text-gray-400 italic">No projects to display</p>
+                            </template>
+                            <div class="grid gap-6">
+                                <template x-for="project in data.projects || []" :key="project.title">
+                                    <div class="bg-hover-bg p-6 rounded-xl">
+                                        <div class="flex justify-between items-start mb-4">
+                                            <div>
+                                                <h3 class="text-lg font-semibold" x-text="project.title"></h3>
+                                                <p class="text-gray-400 text-sm" x-text="project.role"></p>
+                                            </div>
+                                            <a x-show="project.url" :href="project.url" target="_blank"
+                                               class="text-primary hover:text-indigo-300 transition-colors">
+                                                <i class="fas fa-external-link-alt"></i>
+                                            </a>
+                                        </div>
+                                        <p class="text-gray-300 mb-4" x-text="project.description"></p>
+                                        <div class="flex flex-wrap gap-2">
+                                            <template x-for="tech in project.technologies || []" :key="tech">
+                                                <span class="px-3 py-1 bg-primary/20 text-primary rounded-full text-sm">
+                                                    <span x-text="tech"></span>
+                                                </span>
+                                            </template>
+                                        </div>
+                                    </div>
+                                </template>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </template>
+    </div>
+  
+<script>
+document.addEventListener('alpine:init', () => {
+	Alpine.data('profile', () => ({
+		data: {},
+		uid: null,
+
+		getCookie(name) {
+			const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+			return match ? match[2] : null;
+		},
+
+		async fetchProfile() {
+			try {
+				// Get UID from URL parameters
+				const urlParams = new URLSearchParams(window.location.search);
+				this.uid = urlParams.get('uid');
+
+				if (!this.uid) {
+					// If not in URL, check cookie
+					this.uid = this.getCookie('uid');
+
+					if (!this.uid) {
+						// If not in cookie, check Firebase Auth
+						const user = firebase.auth().currentUser;
+						if (user) {
+							this.uid = user.uid;
+							document.cookie = `uid=${this.uid}; path=/;`;
+						} else {
+							window.location.href = '/index.html';
+							return;
+						}
+					}
+				}
+
+				// Fetch profile data from Firestore
+				const docRef = db.collection('profiles').doc(this.uid);
+				const doc = await docRef.get();
+
+				if (doc.exists) {
+					this.data = doc.data();
+					console.log(this.data);
+					if (this.data.createdAt) {
+						this.data.createdAt = this.data.createdAt.toDate();
+					}
+					if (this.data.updatedAt) {
+						this.data.updatedAt = this.data.updatedAt.toDate();
+					}
+				} else {
+					console.log('No profile found for this UID');
+				}
+			} catch (error) {
+				console.error('Error fetching document:', error);
+				alert('Error loading profile: ' + error.message);
+			}
+		},
+
+		async logout() {
+			try {
+				await firebase.auth().signOut();
+
+				// Clear only uid cookie
+				document.cookie = 'uid=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+
+				// Clear storage
+				localStorage.clear();
+				sessionStorage.clear();
+
+				window.location.href = '/index.html';
+			} catch (error) {
+				console.error('Logout failed:', error);
+				alert('Logout failed: ' + error.message);
+			}
+		},
+
+		formatDate(dateString) {
+			if (!dateString) return 'Present';
+			const options = { year: 'numeric', month: 'short' };
+			return new Date(dateString).toLocaleDateString('en-US', options);
+		},
+
+		formatDateRange(start, end) {
+			return `${this.formatDate(start)} - ${this.formatDate(end)}`;
+		}
+	}));
+});
+    </script>
+    
+</body>
+</html>
