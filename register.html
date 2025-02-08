@@ -122,7 +122,7 @@ const firebaseConfig = {
                     });
                 })
                 .then(() => {
-                    window.location.href = '/n.html?uid=' + auth.currentUser.uid;
+                    window.location.href = '/edit.html?uid=' + auth.currentUser.uid;
                     alert(auth.currentUser.uid)
                 })
                 .catch((error) => {
