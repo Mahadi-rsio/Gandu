@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Professional Profile</title>
+
+    <!-- Tailwind CSS (built via your npm build process) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Main JavaScript (uses ES modules) -->
+    <script type="module" crossorigin src="/assets/profile-oFOYZOZD.js"></script>
+    <link rel="modulepreload" crossorigin href="/assets/index-dfc2d82f-DsbbIDgC.js">
+    <link rel="modulepreload" crossorigin href="/assets/index.esm2017-Z80AMlUk.js">
+    <link rel="stylesheet" crossorigin href="/assets/index-dfc2d82f-Df6pd2Yp.css">
+  </head>
+  <body class="bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-100 font-sans min-h-screen relative">
+    <div id="profileContainer" class="container mx-auto px-4 py-8 max-w-7xl">
+      <!-- Loading Spinner -->
+      <div id="loadingSpinner" class="fixed inset-0 bg-black/70 flex items-center justify-center z-50 hidden">
+        <div class="animate-spin rounded-full h-12 w-12 border-4 border-blue-500 border-t-transparent"></div>
+      </div>
+
+      <!-- Header Section -->
+      <header class="text-center mb-12 relative">
+        <!-- Dark Mode Toggle -->
+        <button id="darkModeToggle" class="absolute top-4 right-4 p-2 bg-gray-300 dark:bg-gray-700 rounded-full hover:bg-gray-400 dark:hover:bg-gray-600 transition">
+          <i class="fas fa-moon"></i>
+        </button>
+
+        <!-- Profile Picture -->
+        <div class="mb-6 flex justify-center">
+          <img id="profilePicture" src="https://via.placeholder.com/150" alt="Profile Picture" class="w-32 h-32 rounded-full ring-4 ring-blue-500 object-cover shadow-xl" />
+        </div>
+
+        <h1 id="profileName" class="text-4xl font-bold text-blue-500 mb-2">User Name</h1>
+        <p id="jobTitle" class="text-xl text-gray-500 mb-6">Job Title</p>
+
+        <!-- Action Buttons -->
+        <div class="flex justify-center gap-4 mb-8">
+          <button id="editProfile" class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-full transition-colors flex items-center gap-2" title="Edit Profile">
+            <i class="fas fa-user-edit"></i>
+          </button>
+          <button id="logoutBtn" class="px-4 py-2 bg-blue-700 hover:bg-blue-800 text-white rounded-full transition-colors flex items-center gap-2" title="Logout">
+            <i class="fas fa-sign-out-alt"></i>
+          </button>
+          <button id="messagesBtn" class="px-4 py-2 bg-purple-700 hover:bg-purple-800 text-white rounded-full transition-colors flex items-center gap-2" title="Messages">
+            <i class="fa fa-comments"></i>
+          </button>
+          <button id="copyLinkBtn" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-full transition-colors flex items-center gap-2" title="Copy Profile Link">
+            <i class="fas fa-link"></i>
+          </button>
+        </div>
+
+        <!-- Contact Info -->
+        <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-xl mb-8">
+          <div class="flex flex-wrap justify-center gap-4">
+            <div class="flex items-center gap-2 bg-gray-100 dark:bg-gray-700 px-4 py-2 rounded-lg">
+              <i class="fas fa-map-marker-alt text-blue-500"></i>
+              <span id="location">Location not specified</span>
+            </div>
+            <div class="flex items-center gap-2 bg-gray-100 dark:bg-gray-700 px-4 py-2 rounded-lg">
+              <i class="fas fa-birthday-cake text-blue-500"></i>
+              <span id="dob">Date of birth not specified</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Social Links -->
+        <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-xl">
+          <div id="socialLinks" class="flex flex-wrap justify-center gap-4">
+            <!-- Social links will be inserted dynamically -->
+          </div>
+        </div>
+      </header>
+
+      <!-- Main Sections Container (hidden until data is loaded) -->
+      <div id="mainContent" style="display: none;">
+        <div class="grid md:grid-cols-3 gap-8">
+          <!-- Left Column -->
+          <div class="md:col-span-1 space-y-8">
+            <!-- About Section -->
+            <section id="aboutSection" class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-xl">
+              <h2 class="text-2xl font-bold text-blue-500 mb-4 border-b-2 border-blue-500 pb-2">About Me</h2>
+              <p id="aboutText" class="text-gray-700 dark:text-gray-300 leading-relaxed italic">No description available</p>
+            </section>
+
+            <!-- Skills Section -->
+            <section id="skillsSection" class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-xl">
+              <h2 class="text-2xl font-bold text-blue-500 mb-4 border-b-2 border-blue-500 pb-2">Skills</h2>
+              <div id="skillsList">
+                <!-- Skills will be inserted dynamically -->
+              </div>
+            </section>
+
+            <!-- Education Section -->
+            <section id="educationSection" class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-xl">
+              <h2 class="text-2xl font-bold text-blue-500 mb-4 border-b-2 border-blue-500 pb-2">Education</h2>
+              <div id="educationList">
+                <!-- Education data will be inserted dynamically -->
+              </div>
+            </section>
+          </div>
+
+          <!-- Right Column -->
+          <div class="md:col-span-2 space-y-8">
+            <!-- Experience Section -->
+            <section id="experienceSection" class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-xl">
+              <h2 class="text-2xl font-bold text-blue-500 mb-4 border-b-2 border-blue-500 pb-2">Experience</h2>
+              <div id="experienceList">
+                <!-- Experience data will be inserted dynamically -->
+              </div>
+            </section>
+
+            <!-- Projects Section -->
+            <section id="projectsSection" class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-xl">
+              <h2 class="text-2xl font-bold text-blue-500 mb-4 border-b-2 border-blue-500 pb-2">Projects</h2>
+              <div id="projectsList" class="grid gap-6">
+                <!-- Project cards will be inserted dynamically -->
+              </div>
+            </section>
+
+            <!-- Awards Section -->
+            <section id="awardsSection" class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-xl">
+              <h2 class="text-2xl font-bold text-blue-500 mb-4 border-b-2 border-blue-500 pb-2">Awards</h2>
+              <div id="awardsList">
+                <!-- Awards data will be inserted dynamically -->
+              </div>
+            </section>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

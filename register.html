@@ -1,0 +1,114 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Register</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script type="module" crossorigin src="/assets/register-BHmN0Nbk.js"></script>
+  <link rel="modulepreload" crossorigin href="/assets/index-dfc2d82f-DsbbIDgC.js">
+  <link rel="modulepreload" crossorigin href="/assets/index.esm2017-Z80AMlUk.js">
+  <link rel="stylesheet" crossorigin href="/assets/index-dfc2d82f-Df6pd2Yp.css">
+</head>
+<body class="bg-gray-900 min-h-screen flex items-center justify-center">
+  <div class="bg-gray-800 p-8 rounded-xl shadow-xl w-full max-w-md relative overflow-hidden">
+    <!-- Background overlay -->
+    <div class="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-purple-500/10"></div>
+    <div class="relative">
+      <h2 class="text-3xl font-bold mb-6 text-center text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500">
+        Create Account
+      </h2>
+      
+      <!-- Error Message -->
+      <div id="error-message" class="hidden mb-4 p-3 rounded-lg bg-red-500/20 text-red-300 text-sm border border-red-500/30"></div>
+      
+      <form id="registerForm" class="space-y-6">
+        <!-- Full Name Field -->
+        <div>
+          <label class="block text-gray-300 text-sm font-medium mb-2" for="fullName">Full Name</label>
+          <div class="relative">
+            <i class="fas fa-user absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+            <input
+              type="text"
+              id="fullName"
+              name="fullName"
+              required
+              placeholder="Your full name"
+              class="w-full pl-10 pr-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-500/30 text-gray-100 placeholder-gray-400 transition duration-200"
+            >
+          </div>
+        </div>
+
+        <!-- Email Field -->
+        <div>
+          <label class="block text-gray-300 text-sm font-medium mb-2" for="email">Email</label>
+          <div class="relative">
+            <i class="fas fa-envelope absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              required
+              placeholder="you@example.com"
+              class="w-full pl-10 pr-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-500/30 text-gray-100 placeholder-gray-400 transition duration-200"
+            >
+          </div>
+        </div>
+
+        <!-- Password Field -->
+        <div>
+          <label class="block text-gray-300 text-sm font-medium mb-2" for="password">Password</label>
+          <div class="relative">
+            <i class="fas fa-lock absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              required
+              placeholder="********"
+              class="w-full pl-10 pr-10 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-500/30 text-gray-100 placeholder-gray-400 transition duration-200"
+            >
+            <span class="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-400 toggle-password" data-target="#password">
+              <i class="fas fa-eye"></i>
+            </span>
+          </div>
+          <div id="password-strength" class="mt-2 text-sm"></div>
+        </div>
+
+        <!-- Confirm Password Field -->
+        <div>
+          <label class="block text-gray-300 text-sm font-medium mb-2" for="confirmPassword">Confirm Password</label>
+          <div class="relative">
+            <i class="fas fa-lock absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+            <input
+              type="password"
+              id="confirmPassword"
+              name="confirmPassword"
+              required
+              placeholder="********"
+              class="w-full pl-10 pr-10 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-500/30 text-gray-100 placeholder-gray-400 transition duration-200"
+            >
+            <span class="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-400 toggle-password" data-target="#confirmPassword">
+              <i class="fas fa-eye"></i>
+            </span>
+          </div>
+        </div>
+
+        <!-- Submit Button -->
+        <button
+          type="submit"
+          id="submitBtn"
+          class="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white py-3 px-4 rounded-lg font-medium transition-all duration-200 transform hover:scale-[1.01] shadow-lg hover:shadow-blue-500/20 relative overflow-hidden"
+        >
+          <span class="button-text">Register <i class="fas fa-arrow-right ml-2"></i></span>
+        </button>
+      </form>
+
+      <p class="mt-6 text-center text-gray-400 text-sm">
+        Already have an account? <a href="index.html" class="text-blue-400 hover:underline">Login</a>
+      </p>
+    </div>
+  </div>
+</body>
+</html>
